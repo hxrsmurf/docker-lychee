@@ -1,5 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+# copy config
+[[ ! -e /config/user.ini ]] && \
+	cp /defaults/user.ini /config/user.ini
+cp /config/user.ini /etc/php7/conf.d/99-user.ini
+
 # check for .env and copy default if needed
 [[ ! -f "/config/www/.env" ]] && \
 	cp /app/lychee/.env.example /config/www/.env
@@ -38,7 +43,7 @@ fi
 if [ "${DB_USER}" ];
 	then
 	echo "Running config - db_user set"
-	sed -i "s,APP_KEY=,APP_KEY=${key},g" /config/www/.env
+	sed -i "s,APP_KEY=$,APP_KEY=${key},g" /config/www/.env
 	sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${DB_HOST}/g" /config/www/.env
 	sed -i "s/DB_DATABASE=homestead/DB_DATABASE=${DB_DATABASE}/g" /config/www/.env
 	sed -i "s/DB_USERNAME=homestead/DB_USERNAME=${DB_USER}/g" /config/www/.env
