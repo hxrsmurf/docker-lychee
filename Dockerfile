@@ -14,6 +14,7 @@ RUN \
 	composer && \
  echo "**** install runtime packages ****" && \
  apk add --no-cache \
+	curl \
 	ffmpeg \
 	php7-exif \
 	php7-gd \
