@@ -1,4 +1,4 @@
-FROM lsiobase/alpine.nginx:3.8
+FROM lsiobase/alpine.nginx:3.10
 
 # set version label
 ARG BUILD_DATE
@@ -27,7 +27,12 @@ RUN \
 	php7-xml \
 	php7-zip && \
  echo "**** install lychee ****" && \
+ if [ -z ${LYCHEE_RELEASE+x} ]; then \
+ 	LYCHEE_RELEASE=$(curl -sX GET "https://api.github.com/repos/LycheeOrg/Lychee-Laravel/commits/master" \
+	| awk '/sha/{print $4;exit}' FS='[""]'); \
+ fi && \
  git clone --recursive https://github.com/LycheeOrg/Lychee-Laravel /app/lychee && \
+ git -C /app/lychee checkout ${LYCHEE_RELEASE} && \
  echo "**** install composer dependencies ****" && \
  composer install \
  	-d /app/lychee \
