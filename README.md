@@ -84,18 +84,30 @@ Compatible with docker-compose v2 schemas.
 version: "2"
 services:
   lychee:
+    depends_on:
+      - db
     image: linuxserver/lychee
     container_name: lychee
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
+      - TZ=US/Central
     volumes:
-      - </path/to/appdata/config>:/config
-      - </path/to/pictures>:/pictures
+      - ./config:/config
+      - ./pictures:/pictures
     ports:
       - 80:80
     restart: unless-stopped
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./database:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: securepassword
+      MYSQL_DATABASE: lychee
+      MYSQL_USER: lychee
+      MYSQL_PASSWORD: securepassword
 ```
 
 ## Parameters
